@@ -1,0 +1,16 @@
+{
+  "name": "mtgcollection",
+  "version": "1.0.0",
+  "description": "Application that allows Magic The Gathering players keep track of their personal collection",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "magic",
+    "the",
+    "gathering"
+  ],
+  "author": "tony radicchi, diogo carbone",
+  "license": "ISC"
+}
