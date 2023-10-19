@@ -9,3 +9,33 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+
+model User {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  username  String   @unique
+  firstName String   @db.VarChar(255)
+  lastName  String   @db.VarChar(255)
+  emailAddress String @unique
+  userCards UserCard[]
+}
+
+model Card {
+  id        String   @id @default(uuid())
+  name      String   @unique
+  imageUrl   String?
+  userCards UserCard[]
+}
+
+model UserCard {
+  id        String   @id @default(uuid())
+  quantity  Int
+
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  cardId    String
+  card      Card     @relation(fields: [cardId], references: [id])
+
+  @@unique([userId, cardId])
+}
