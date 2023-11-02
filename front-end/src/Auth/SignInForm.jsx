@@ -1,13 +1,16 @@
-import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import FormInput from "./FormInput";
+import SignButton from "./SignButton";
 
-const SignIn = () => {
+const SignInForm = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [isNotFound, setIsNotFound] = useState(false);
 
   const navigate = useNavigate();
-
   const handleSignIn = (e) => {
+    setIsNotFound(false);
     e.preventDefault();
     const data = { username, password };
     fetch("http://127.0.0.1:3001/signin", {
@@ -23,38 +26,45 @@ const SignIn = () => {
         localStorage.setItem("token", data.token);
         navigate("/displaycards");
       })
-      .catch((error) => {
-        console.error("Error:", error);
+      .catch(() => {
+        setIsNotFound(true);
+        setTimeout(() => {
+          setIsNotFound(false);
+        }, 4000);
       });
   };
 
   return (
     <>
-      <div className="">
-        <h1 className="text-3xl font-bold underline">Sign In</h1>
-        <form onSubmit={handleSignIn} className="flex flex-col">
-          <label htmlFor="username">Username</label>
-          <input
+      <h1 className="block mb-2 text-3xl font-medium text-gray-900 dark:text-white">
+        Sign In
+      </h1>
+      <form className="flex flex-col">
+        <div className="flex flex-col">
+          <FormInput
+            label="Username"
             type="text"
-            placeholder="username"
             id="username"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
           />
-          <label htmlFor="password">Password</label>
-          <input
+          <FormInput
+            label="Password"
             type="password"
-            placeholder="password"
             id="password"
             value={password}
-            required
             onChange={(e) => setPassword(e.target.value)}
           />
-          <button type="submit">Sign In</button>
-        </form>
-      </div>
+        </div>
+        <SignButton content="Sign In" onClick={handleSignIn} />
+      </form>
+      {isNotFound && (
+        <p className="text-red-600 text-sm">
+          Username or password is incorrect
+        </p>
+      )}
     </>
   );
 };
 
-export default SignIn;
+export default SignInForm;
