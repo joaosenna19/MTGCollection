@@ -1,18 +1,42 @@
 import FormInput from "./FormInput";
 import SignButton from "./SignButton";
 import { useState } from "react";
+import { useNavigate } from "react-router";
 
 const SignUp = () => {
+  const navigate = useNavigate();
+
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
-  const [email, setEmail] = useState("");
+  const [emailAddress, setEmailAddress] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
   const handleSignUp = (e) => {
     e.preventDefault();
-    const data = { firstName, lastName, email, username, password };
-    console.log(data);
+    const data = {
+      firstName,
+      lastName,
+      emailAddress,
+      username,
+      password,
+    };
+    fetch("http://127.0.0.1:3001/newuser", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("Success");
+        localStorage.setItem("token", data.token);
+        navigate("/displaycards");
+      })
+      .catch((e) => {
+        console.log(e);
+      });
   };
 
   return (
@@ -40,8 +64,8 @@ const SignUp = () => {
             label="Email"
             type="email"
             id="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            value={emailAddress}
+            onChange={(e) => setEmailAddress(e.target.value)}
           />
           <FormInput
             label="Username"
@@ -60,6 +84,7 @@ const SignUp = () => {
         </div>
         <SignButton content="Sign Up" onClick={handleSignUp} />
       </form>
+      <p>{emailAddress}</p>
       {/* {isNotFound && (
         <p className="text-red-600 text-sm">
           Username or password is incorrect
