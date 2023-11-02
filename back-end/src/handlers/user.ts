@@ -24,9 +24,17 @@ export const signin = async (req, res) => {
     },
   });
 
+  if (!user) {
+    console.log("User not found");
+    res.status(401);
+    res.send("Invalid username or password");
+    return;
+  }
+
   const isValid = await comparePasswords(req.body.password, user.password);
 
   if (!isValid) {
+    console.log("Invalid password");
     res.status(401);
     res.send("Invalid username or password");
     return;
