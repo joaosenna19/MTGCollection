@@ -11,6 +11,7 @@ const SignUp = () => {
   const [emailAddress, setEmailAddress] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [isBeingUsed, setIsBeingUsed] = useState(false);
 
   const handleSignUp = (e) => {
     e.preventDefault();
@@ -28,14 +29,22 @@ const SignUp = () => {
       },
       body: JSON.stringify(data),
     })
-      .then((response) => response.json())
-      .then((data) => {
-        console.log("Success");
-        localStorage.setItem("token", data.token);
-        navigate("/displaycards");
+      .then((response) => {
+        if (response.ok) {
+          return response.json().then((data) => {
+            console.log("Success");
+            localStorage.setItem("token", data.token);
+            navigate("/displaycards");
+          });
+        } else {
+          return response.json().then((errorData) => {
+            console.error(errorData);
+            setIsBeingUsed(!isBeingUsed);
+          });
+        }
       })
-      .catch((e) => {
-        console.log(e);
+      .catch((error) => {
+        console.error(error);
       });
   };
 
@@ -85,11 +94,11 @@ const SignUp = () => {
         <SignButton content="Sign Up" onClick={handleSignUp} />
       </form>
       <p>{emailAddress}</p>
-      {/* {isNotFound && (
+      {isBeingUsed && (
         <p className="text-red-600 text-sm">
-          Username or password is incorrect
+          Username or email is alredy in use
         </p>
-      )} */}
+      )}
     </>
   );
 };
