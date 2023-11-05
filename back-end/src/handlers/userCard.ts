@@ -1,74 +1,116 @@
 // @ts-nocheck
-import { create } from "domain";
 import prisma from "../db";
-import { createNewCard } from "./card";
-
-export const addCardToUser = async (req, res) => {
-    const user = await prisma.user.findUnique({
-        where: {
-            id: req.user.id
-        }
-    });
-
-    if(!user) {
-        res.status(404).send("User not found!");
-        return;
-    }
-
-    const card = await prisma.card.findUnique({
-        where: {
-            name: req.body.name
-        }
-    });
-
-    if(!card) {
-        card = await createNewCard(req, res);
-    }
-
-    const userCard = await prisma.userCard.create({
-        data: {
-            userId: user.id,
-            cardId: card.id,
-            quantity: req.body.quantity
-        }
-    });
-
-    res.json(userCard);
-}
+import { createNewCard, getCardByName } from "./card";
 
 export const getUserCards = async (req, res) => {
+  const user = req.user;
+  try {
     const userCards = await prisma.userCard.findMany({
-        where: {
-            userId: req.user.id
-        }
+      where: {
+        userId: user.id,
+      },
+      include: {
+        card: true,
+      },
     });
+    return res.status(200).json(userCards);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: "Oops, it's on us" });
+  }
+};
 
-    if(!userCards) {
-        res.status(404).send("User not found!");
-        return;
+export const addUserCard = async (req, res) => {
+  const { name, imageUrl, quantity } = req.body;
+  quantity = parseInt(quantity);
+  const user = req.user;
+
+  try {
+    const card = await getUserCard(name);
+    if (card.error) {
+      const newCard = await createNewCard(name, imageUrl);
+      const userCard = await createUserCard(user.id, newCard.id, quantity);
+      return res.status(200).json(userCard);
+    } else if (card.notBelongsTo) {
+      const userCard = await createUserCard(user.id, card.cardId, quantity);
+      return res.status(200).json(userCard);
+    } else {
+      const updatedUserCard = await updateUserCard(card.id, quantity);
+      return res.status(200).json(updatedUserCard);
     }
-
-    res.json(userCards.card);
-}
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: "Oops, it's on us" });
+  }
+};
 
 export const deleteUserCard = async (req, res) => {
+  const user = req.user;
+  const { name } = req.params;
 
-    const card = await prisma.card.findUnique({
-        where: {
-            name: req.body.name
-        }
-    });
-
-    if(!card) {
-        res.status(404).send("Card not found!");
-        return;
-    }
-
+  try {
+    const card = await getUserCard(name);
+    if (card.error) return res.status(404).json({ error: "Card not found" });
+    if (card.notBelongsTo)
+      return res.status(404).json({ error: "User doesn't have this card" });
     const userCard = await prisma.userCard.delete({
-        where: {
-            cardId: card.id
-        }
+      where: {
+        id: card.id,
+        userId: user.id,
+      },
     });
+    return res.status(200).json(userCard);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: "Oops, it's on us" });
+  }
+};
 
-    res.json(userCard);
-}
+const getUserCard = async (name) => {
+  try {
+    const card = await getCardByName(name);
+    if (card.error) {
+      return { error: "Card not found" };
+    }
+    const userCard = await prisma.userCard.findFirst({
+      where: {
+        cardId: card.id,
+      },
+    });
+    if (!userCard) {
+      console.log("User card not found");
+      return { notBelongsTo: "User card not found", cardId: card.id };
+    }
+    return userCard;
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: "Oops, it's on us" });
+  }
+};
+
+const createUserCard = async (userId, cardId, quantity) => {
+  try {
+    const userCard = await prisma.userCard.create({
+      data: {
+        userId,
+        cardId,
+        quantity,
+      },
+    });
+    return userCard;
+  } catch (error) {
+    return error;
+  }
+};
+
+const updateUserCard = async (id, quantity) => {
+  const updatedUserCard = await prisma.userCard.update({
+    where: {
+      id,
+    },
+    data: {
+      quantity,
+    },
+  });
+  return updatedUserCard;
+};

@@ -15,6 +15,8 @@ app.use(express.urlencoded({ extended: true }));
 app.get("/", (req, res) => {
   res.json({ message: "true" });
 });
+// app.get("/card/:name", getCardByName);
+// app.post("/card", createNewCard);
 
 app.use("/api", protect, router);
 app.post("/newuser", createNewUser);
