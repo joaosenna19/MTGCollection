@@ -30,7 +30,7 @@ export const protect = (req, res, next) => {
   const token = bearer.split(" ")[1];
 
   if (!token) {
-    res.status(401);
+    res.status(401).json({ message: "Invalid Token!" });
     res.send("Invalid token!");
     return;
   }
