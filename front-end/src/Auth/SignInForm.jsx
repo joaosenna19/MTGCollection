@@ -13,7 +13,7 @@ const SignInForm = () => {
     setIsNotFound(false);
     e.preventDefault();
     const data = { username, password };
-    fetch("http://127.0.0.1:3001/signin", {
+    fetch("https://mtgcollectionapi.onrender.com/signin", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -23,8 +23,9 @@ const SignInForm = () => {
       .then((response) => response.json())
       .then((data) => {
         console.log("Success");
+        console.log(data);
         localStorage.setItem("token", data.token);
-        navigate("/displaycards");
+        navigate("/collection");
       })
       .catch(() => {
         setIsNotFound(true);

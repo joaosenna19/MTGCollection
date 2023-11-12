@@ -7,14 +7,14 @@ import {
   Route,
   RouterProvider,
 } from "react-router-dom";
-import DisplayCards from "./DisplayCards.jsx";
 import LandingPage from "./LandingPage.jsx";
+import MainCollection from "./Collection/MainCollection.jsx";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/">
       <Route path="/" element={<LandingPage />} />,
-      <Route path="/displaycards" element={<DisplayCards />} />
+      <Route path="/collection" element={<MainCollection />} />,
     </Route>
   )
 );

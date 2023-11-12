@@ -22,7 +22,7 @@ const SignUp = () => {
       username,
       password,
     };
-    fetch("http://127.0.0.1:3001/newuser", {
+    fetch("https://mtgcollectionapi.onrender.com/newuser", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
