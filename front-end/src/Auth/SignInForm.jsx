@@ -13,7 +13,7 @@ const SignInForm = () => {
     setIsNotFound(false);
     e.preventDefault();
     const data = { username, password };
-    fetch("https://mtgcollectionapi.onrender.com/signin", {
+    fetch("http://localhost:3001/signin", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

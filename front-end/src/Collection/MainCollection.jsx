@@ -12,7 +12,7 @@ const MainCollection = () => {
   const getCards = () => {
     const token = localStorage.getItem("token");
 
-    fetch("https://mtgcollectionapi.onrender.com/api/card", {
+    fetch("http://localhost:3001/api/card", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
