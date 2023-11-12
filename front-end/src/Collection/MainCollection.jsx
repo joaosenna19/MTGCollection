@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
+import NavBar from "./NavBar";
+import CardTable from "./CardTable";
 
-const DisplayCards = () => {
-  const [cards, setCards] = useState([]);
+const MainCollection = () => {
+  const [data, setData] = useState([]);
 
   useEffect(() => {
     getCards();
@@ -10,7 +12,7 @@ const DisplayCards = () => {
   const getCards = () => {
     const token = localStorage.getItem("token");
 
-    fetch("http://127.0.0.1:3001/api/card", {
+    fetch("http://localhost:3001/api/card", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -20,7 +22,8 @@ const DisplayCards = () => {
       .then((res) => res.json())
       .then((data) => {
         console.log("Success");
-        setCards(data);
+        console.log(data);
+        setData(data);
       })
       .catch((error) => {
         console.error("Error:", error);
@@ -28,14 +31,16 @@ const DisplayCards = () => {
   };
 
   return (
-    <div>
-      {cards.map((card) => (
-        <div key={card.id}>
-          <h1>{card.name}</h1>
+    <>
+      <NavBar />
+      <div className="min-h-screen  bg-neutral-700">
+        <div className="flex flex-col">
+          <h2 className="m-auto pt-7 text-white text-lg">Collection</h2>
+          <CardTable data={data} />
         </div>
-      ))}
-    </div>
+      </div>
+    </>
   );
 };
 
-export default DisplayCards;
+export default MainCollection;

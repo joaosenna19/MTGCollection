@@ -22,7 +22,7 @@ const SignUp = () => {
       username,
       password,
     };
-    fetch("http://127.0.0.1:3001/newuser", {
+    fetch("http://localhost:3001/newuser", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
