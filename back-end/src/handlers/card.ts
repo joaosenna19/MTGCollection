@@ -2,7 +2,6 @@
 import prisma from "../db";
 
 export const getCardByName = async (name) => {
-  console.log(name);
   try {
     const card = await prisma.card.findFirst({
       where: {

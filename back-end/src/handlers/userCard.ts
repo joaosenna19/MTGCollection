@@ -26,7 +26,7 @@ export const addUserCard = async (req, res) => {
   const user = req.user;
 
   try {
-    const card = await getUserCard(name);
+    const card = await getUserCard(name, user);
     if (card.error) {
       const newCard = await createNewCard(name, imageUrl);
       const userCard = await createUserCard(user.id, newCard.id, quantity);
@@ -66,7 +66,7 @@ export const deleteUserCard = async (req, res) => {
   }
 };
 
-const getUserCard = async (name) => {
+const getUserCard = async (name, user) => {
   try {
     const card = await getCardByName(name);
     if (card.error) {
@@ -75,11 +75,12 @@ const getUserCard = async (name) => {
     const userCard = await prisma.userCard.findFirst({
       where: {
         cardId: card.id,
+        userId: user.id,
       },
     });
     if (!userCard) {
       console.log("User card not found");
-      return { notBelongsTo: "User card not found", cardId: card.id };
+      return { notBelongsTo: true, cardId: card.id };
     }
     return userCard;
   } catch (error) {
