@@ -49,7 +49,7 @@ export const deleteUserCard = async (req, res) => {
   const { name } = req.params;
 
   try {
-    const card = await getUserCard(name);
+    const card = await getUserCard(name, user);
     if (card.error) return res.status(404).json({ error: "Card not found" });
     if (card.notBelongsTo)
       return res.status(404).json({ error: "User doesn't have this card" });
