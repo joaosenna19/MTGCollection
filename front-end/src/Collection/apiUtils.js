@@ -1,7 +1,7 @@
 export const getCardsApi = async (setData) => {
   const token = localStorage.getItem("token");
 
-  fetch("http://localhost:3001/api/card", {
+  await fetch("http://localhost:3001/api/card", {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
