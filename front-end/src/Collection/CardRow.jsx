@@ -19,7 +19,7 @@ const CardRow = ({ image, name, quantity, update }) => {
   };
 
   const deleteCard = async () => {
-    deleteCardApi(name);
+    await deleteCardApi(name);
     update((prev) => !prev);
   };
 
