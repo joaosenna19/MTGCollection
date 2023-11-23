@@ -9,6 +9,7 @@ const CardTable = () => {
   const [data, setData] = useState([]);
   useEffect(() => {
     getCardsApi(setData);
+    console.log("isUpdated: ", isUpdated);
   }, [isUpdated]);
 
   const cols = ["Quantity", "Name", "", "", ""];
