@@ -1,7 +1,10 @@
+const apiUrl = "http://127.0.0.1:3001";
+
 export const getCardsApi = async (setData) => {
   const token = localStorage.getItem("token");
+  console.log("Token:", token);
 
-  await fetch("http://localhost:3001/api/card", {
+  await fetch(`${apiUrl}/api/card`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
@@ -25,7 +28,7 @@ export const updateCardQuantityApi = async (
   setCardQuantity
 ) => {
   try {
-    const response = await fetch("http://localhost:3001/api/card", {
+    const response = await fetch(`${apiUrl}/api/card`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -45,7 +48,7 @@ export const updateCardQuantityApi = async (
 
 export const deleteCardApi = async (name) => {
   try {
-    const response = await fetch(`http://localhost:3001/api/card/${name}`, {
+    const response = await fetch(`${apiUrl}/api/card/${name}`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
@@ -63,7 +66,7 @@ export const deleteCardApi = async (name) => {
 
 export const addCardToCollection = async (name) => {
   try {
-    const response = await fetch("http://localhost:3001/api/card", {
+    const response = await fetch(`${apiUrl}/api/card`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
