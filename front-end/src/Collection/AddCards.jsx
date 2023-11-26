@@ -1,6 +1,6 @@
 import { createPortal } from "react-dom";
 import { useState } from "react";
-import AddCardsModal from "./AddCardsModal";
+import AddCardsModal from "./Modal/AddCardsModal";
 import PlusIcon from "./PlusIcon";
 
 const AddCards = () => {
