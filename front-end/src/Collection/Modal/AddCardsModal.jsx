@@ -4,29 +4,12 @@ import { searchCards } from "../thirdPartyApiUtils";
 import AddForms from "./AddForms";
 import ModalButtons from "./ModalButtons";
 import SelectModal from "./SelectModal";
+import { addCardToCollection } from "../apiUtils";
 
 const AddCardsModal = ({ onClose }) => {
   const [params, setParams] = useState("");
   const [cards, setCards] = useState([]);
   const [selectedCard, setSelectedCard] = useState(null);
-
-  const addCardToCollection = async (name) => {
-    try {
-      const response = await fetch("http://localhost:3001/api/card", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-        body: JSON.stringify({ name, imageUrl: undefined, quantity: 1 }),
-      });
-
-      const data = await response.json();
-      console.log(data);
-    } catch (error) {
-      console.error("Error:", error);
-    }
-  };
 
   return (
     <div className="fixed inset-0 flex items-center justify-center z-50">

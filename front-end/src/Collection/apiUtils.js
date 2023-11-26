@@ -60,3 +60,21 @@ export const deleteCardApi = async (name) => {
     console.error("Error:", error);
   }
 };
+
+export const addCardToCollection = async (name) => {
+  try {
+    const response = await fetch("http://localhost:3001/api/card", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+      body: JSON.stringify({ name, imageUrl: undefined, quantity: 1 }),
+    });
+
+    const data = await response.json();
+    console.log(data);
+  } catch (error) {
+    console.error("Error:", error);
+  }
+};
