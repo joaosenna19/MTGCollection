@@ -12,13 +12,9 @@ import MainCollection from "./Collection/MainCollection.jsx";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
-    <Route path="/MTGCollection/front-end/">
-      <Route path="/MTGCollection/front-end/" element={<LandingPage />} />,
-      <Route
-        path="/MTGCollection/front-end/collection"
-        element={<MainCollection />}
-      />
-      ,
+    <Route path="/">
+      <Route path="/" element={<LandingPage />} />,
+      <Route path="/collection" element={<MainCollection />} />,
     </Route>
   )
 );
